@@ -1,7 +1,16 @@
-pyTelegramBotAPI==4.14.0    # Para el bot de Telegram (telebot)
-Flask==2.2.5               # Para la web API de Render
-requests==2.31.0           # Para consultar APIs (BCV, Binance, etc.)
-schedule==1.2.0            # Para tareas automáticas (enviar tasas diarias)
-trafilatura==1.6.2         # Para scraping de páginas si usas CLPTodayScraper
-beautifulsoup4==4.12.2     # (Opcional) Para parsear HTML si es necesario
-lxml==4.9.3                # (Opcional) Requerido por algunas funciones de scraping
+# Bot de Telegram
+pyTelegramBotAPI==4.14.0
+
+# Web API
+Flask==2.2.5
+
+# APIs y peticiones HTTP
+requests==2.31.0
+
+# Tareas programadas
+schedule==1.2.0
+
+# Scraping
+trafilatura==1.6.2
+beautifulsoup4==4.12.2
+lxml==4.9.3
