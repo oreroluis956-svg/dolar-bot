@@ -1,0 +1,42 @@
+/* Platform logo styles for Venezuelan Dollar Bot */
+
+.platform-logo {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    margin-right: 5px;
+    vertical-align: middle;
+    border-radius: 3px;
+}
+
+.platform-binance {
+    background: linear-gradient(45deg, #F3BA2F, #FCD535);
+}
+
+.platform-bybit {
+    background: linear-gradient(45deg, #F7931A, #FF6B35);
+}
+
+.platform-okx {
+    background: linear-gradient(45deg, #000000, #333333);
+}
+
+.platform-kucoin {
+    background: linear-gradient(45deg, #24AE8F, #0FBA83);
+}
+
+.platform-airtm {
+    background: linear-gradient(45deg, #2E86AB, #5BA8D6);
+}
+
+.platform-zelle {
+    background: linear-gradient(45deg, #6B2C91, #8E44AD);
+}
+
+.platform-paypal {
+    background: linear-gradient(45deg, #003087, #0070BA);
+}
+
+.platform-bcv {
+    background: linear-gradient(45deg, #8B0000, #CD5C5C);
+}

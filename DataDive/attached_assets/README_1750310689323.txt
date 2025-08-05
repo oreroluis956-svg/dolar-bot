@@ -1,0 +1,13 @@
+Bot de Telegram para mostrar tasas del dólar en Venezuela:
+
+Fuentes:
+- BCV (oficial)
+- Zelle (EnParaleloVzla)
+- PayPal (DollarHouse)
+- El Dorado (remplaza MonitorDólar)
+
+Requiere en Secrets:
+- TOKEN
+- CHAT_ID
+
+Comando: /tasas

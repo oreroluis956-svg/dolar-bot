@@ -1,0 +1,34 @@
+GUÍA PARA CREAR TU BOT DEL DÓLAR EN REPLIT
+
+1️⃣ CREA TU CUENTA EN REPLIT
+---------------------------------
+- Ve a https://replit.com y crea una cuenta (si no tienes).
+- Haz clic en "+ Create" → Elige "Python".
+
+2️⃣ PEGA EL CÓDIGO
+---------------------------------
+- En el archivo main.py, borra lo que hay y pega el contenido de este archivo que te enviamos.
+
+3️⃣ AGREGA TUS VARIABLES DE ENTORNO
+---------------------------------
+- Haz clic en el ícono de "bloqueo" 🔒 (a la izquierda).
+- Agrega:
+  TOKEN = tu token del bot (de BotFather)
+  CHAT_ID = tu ID de Telegram (de @userinfobot)
+
+4️⃣ INSTALA LAS DEPENDENCIAS
+---------------------------------
+- Haz clic en el archivo "pyproject.toml" o consola y ejecuta:
+  pip install pyTelegramBotAPI requests replit
+
+5️⃣ PROGRAMA LA EJECUCIÓN AUTOMÁTICA A LAS 9AM
+---------------------------------
+- Usa el plugin “Scheduler” en Replit o un cron externo como UptimeRobot.
+- Ejemplo: https://uptimerobot.com → programa que abra tu Replit cada día a las 9:00 AM hora Venezuela.
+
+6️⃣ ¡LISTO!
+---------------------------------
+- Escribe "/tasas" en tu bot y verás los precios en tiempo real.
+- Recibirás la actualización automática cada día hábil a las 9:00 AM, más alerta si sube o baja +2%.
+
+¿Necesitas ayuda? Escríbeme de nuevo en ChatGPT.

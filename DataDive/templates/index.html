@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bot del Dólar Venezolano - Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="/static/style.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <header class="bg-primary text-white p-3 mb-4">
+                    <h1 class="h3 mb-0">
+                        <i class="fas fa-robot me-2"></i>
+                        Bot del Dólar Venezolano - Dashboard
+                    </h1>
+                </header>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Status Card -->
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Estado del Bot
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="bot-status">
+                            <div class="text-center">
+                                <div class="spinner-border" role="status">
+                                    <span class="visually-hidden">Cargando...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Current Rates Card -->
+            <div class="col-md-6 col-lg-8 mb-4">
+                <div class="card h-100">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-dollar-sign me-2"></i>
+                            Tasas Actuales
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="current-rates">
+                            <div class="text-center">
+                                <div class="spinner-border" role="status">
+                                    <span class="visually-hidden">Cargando...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Statistics Card -->
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header bg-warning text-dark">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-chart-bar me-2"></i>
+                            Estadísticas
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="statistics">
+                            <div class="text-center">
+                                <div class="spinner-border" role="status">
+                                    <span class="visually-hidden">Cargando...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Logs Card -->
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header bg-secondary text-white">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-list me-2"></i>
+                            Logs Recientes
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="logs" style="max-height: 300px; overflow-y: auto;">
+                            <div class="text-center">
+                                <div class="spinner-border" role="status">
+                                    <span class="visually-hidden">Cargando...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Instructions Card -->
+        <div class="row">
+            <div class="col-12 mb-4">
+                <div class="card">
+                    <div class="card-header bg-dark text-white">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-cog me-2"></i>
+                            Configuración
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6>Variables de Entorno Requeridas:</h6>
+                                <ul class="list-unstyled">
+                                    <li><code>TOKEN</code> - Token del bot de Telegram</li>
+                                    <li><code>CHAT_ID</code> - ID del chat para notificaciones</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>Comandos del Bot:</h6>
+                                <ul class="list-unstyled">
+                                    <li><code>/start</code> - Iniciar el bot</li>
+                                    <li><code>/tasas</code> - Consultar tasas actuales</li>
+                                    <li><code>/help</code> - Mostrar ayuda</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Auto-refresh data every 30 seconds
+        setInterval(loadData, 30000);
+        
+        // Load data on page load
+        document.addEventListener('DOMContentLoaded', loadData);
+        
+        async function loadData() {
+            await Promise.all([
+                loadBotStatus(),
+                loadLogs()
+            ]);
+        }
+        
+        async function loadBotStatus() {
+            try {
+                const response = await fetch('/api/status');
+                const result = await response.json();
+                
+                if (result.success) {
+                    displayBotStatus(result.data);
+                    displayCurrentRates(result.data);
+                    displayStatistics(result.data);
+                } else {
+                    displayError('bot-status', 'Error cargando estado del bot');
+                }
+            } catch (error) {
+                console.error('Error loading bot status:', error);
+                displayError('bot-status', 'Error de conexión');
+            }
+        }
+        
+        async function loadLogs() {
+            try {
+                const response = await fetch('/api/logs');
+                const result = await response.json();
+                
+                if (result.success) {
+                    displayLogs(result.data);
+                } else {
+                    displayError('logs', 'Error cargando logs');
+                }
+            } catch (error) {
+                console.error('Error loading logs:', error);
+                displayError('logs', 'Error de conexión');
+            }
+        }
+        
+        function displayBotStatus(data) {
+            const statusEl = document.getElementById('bot-status');
+            const schedulerStatus = data.scheduler_running ? 
+                '<span class="badge bg-success">Activo</span>' : 
+                '<span class="badge bg-danger">Inactivo</span>';
+            
+            const lastUpdate = data.last_update ? 
+                new Date(data.last_update).toLocaleString('es-VE') : 
+                'Nunca';
+            
+            statusEl.innerHTML = `
+                <div class="mb-3">
+                    <strong>Programador:</strong> ${schedulerStatus}
+                </div>
+                <div class="mb-3">
+                    <strong>Última Actualización:</strong><br>
+                    <small class="text-muted">${lastUpdate}</small>
+                </div>
+                <div class="mb-3">
+                    <strong>Chat ID:</strong> <code>${data.chat_id}</code>
+                </div>
+            `;
+        }
+        
+        function displayCurrentRates(data) {
+            const ratesEl = document.getElementById('current-rates');
+            
+            if (!data.last_rates) {
+                ratesEl.innerHTML = '<p class="text-muted">No hay datos de tasas disponibles</p>';
+                return;
+            }
+            
+            const rates = data.last_rates;
+            let html = `
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>🇻🇪 BCV Oficial</h6>
+                        <h4 class="text-primary">${rates.bcv} Bs</h4>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>📊 Promedio General</h6>
+                        <h4 class="text-success">${rates.promedio.toFixed(2)} Bs</h4>
+                    </div>
+                </div>
+            `;
+            
+            if (rates.p2p && Object.keys(rates.p2p).length > 0) {
+                html += '<hr><h6>💸 Mercado P2P</h6><div class="row">';
+                Object.entries(rates.p2p).forEach(([name, value]) => {
+                    html += `
+                        <div class="col-md-6 mb-2">
+                            <strong>${name}:</strong> ${value} Bs
+                        </div>
+                    `;
+                });
+                html += '</div>';
+            }
+            
+            ratesEl.innerHTML = html;
+        }
+        
+        function displayStatistics(data) {
+            const statsEl = document.getElementById('statistics');
+            
+            if (!data.stats) {
+                statsEl.innerHTML = '<p class="text-muted">No hay estadísticas disponibles</p>';
+                return;
+            }
+            
+            const stats = data.stats;
+            statsEl.innerHTML = `
+                <div class="row">
+                    <div class="col-6">
+                        <small class="text-muted">Máximo</small><br>
+                        <strong>${stats.max.toFixed(2)} Bs</strong>
+                    </div>
+                    <div class="col-6">
+                        <small class="text-muted">Mínimo</small><br>
+                        <strong>${stats.min.toFixed(2)} Bs</strong>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-6">
+                        <small class="text-muted">Promedio</small><br>
+                        <strong>${stats.avg.toFixed(2)} Bs</strong>
+                    </div>
+                    <div class="col-6">
+                        <small class="text-muted">Registros</small><br>
+                        <strong>${stats.count}</strong>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function displayLogs(logs) {
+            const logsEl = document.getElementById('logs');
+            
+            if (!logs || logs.length === 0) {
+                logsEl.innerHTML = '<p class="text-muted">No hay logs disponibles</p>';
+                return;
+            }
+            
+            const logsHtml = logs.map(log => {
+                const level = log.includes('ERROR') ? 'danger' : 
+                             log.includes('WARNING') ? 'warning' : 
+                             log.includes('INFO') ? 'info' : 'secondary';
+                return `<div class="alert alert-${level} py-1 px-2 mb-1"><small>${log}</small></div>`;
+            }).join('');
+            
+            logsEl.innerHTML = logsHtml;
+            logsEl.scrollTop = logsEl.scrollHeight;
+        }
+        
+        function displayError(elementId, message) {
+            const el = document.getElementById(elementId);
+            el.innerHTML = `<div class="alert alert-danger">${message}</div>`;
+        }
+    </script>
+</body>
+</html>
